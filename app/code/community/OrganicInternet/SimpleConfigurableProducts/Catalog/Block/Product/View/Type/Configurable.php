@@ -5,6 +5,10 @@ class OrganicInternet_SimpleConfigurableProducts_Catalog_Block_Product_View_Type
 {
     public function getJsonConfig()
     {
+        $storeId = Mage::app()->getStore()->getStoreId();
+        if(!Mage::helper('simpleconfigurableproducts')->IsModuleActiveOnStore($storeId)) {
+            return parent::getJsonConfig();
+        }
         $config = Zend_Json::decode(parent::getJsonConfig());
 
         $childProducts = array();
@@ -65,7 +69,7 @@ class OrganicInternet_SimpleConfigurableProducts_Catalog_Block_Product_View_Type
         $p = $this->getProduct();
         $config['childProducts'] = $childProducts;
         if ($p->getMaxPossibleFinalPrice() != $p->getFinalPrice()) {
-            $config['priceFromLabel'] = $this->__('Price From:');
+            $config['priceFromLabel'] = $this->__('From:');
         } else {
             $config['priceFromLabel'] = $this->__('');
         }

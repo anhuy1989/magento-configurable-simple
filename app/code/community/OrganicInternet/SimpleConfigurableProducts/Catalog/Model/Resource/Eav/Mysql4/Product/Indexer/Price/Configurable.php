@@ -20,6 +20,7 @@ class OrganicInternet_SimpleConfigurableProducts_Catalog_Model_Resource_Eav_Mysq
     #It's all quite complicated. :/
     protected function _prepareFinalPriceData($entityIds = null)
     {
+
         $this->_prepareDefaultFinalPriceTable();
 
         $write  = $this->_getWriteAdapter();
@@ -84,8 +85,8 @@ class OrganicInternet_SimpleConfigurableProducts_Catalog_Model_Resource_Eav_Mysq
             'max_price'         => new Zend_Db_Expr('pi.final_price'),
             'tier_price'        => new Zend_Db_Expr('pi.tier_price'),
             'base_tier'         => new Zend_Db_Expr('pi.tier_price'),
-             'group_price'         => new Zend_Db_Expr('pi.tier_price'),
-         'base_group_price'         => new Zend_Db_Expr('pi.tier_price'),
+            'group_price'         => new Zend_Db_Expr('pi.tier_price'),
+            'base_group_price'         => new Zend_Db_Expr('pi.tier_price'),
         ));
 
 
@@ -100,7 +101,6 @@ class OrganicInternet_SimpleConfigurableProducts_Catalog_Model_Resource_Eav_Mysq
         #3rd) $price, in case all finalPrices are NULL. (this gives the lowest price for all associated products when they're all out of stock)
         $sortExpr = new Zend_Db_Expr("${isInStockExpr} DESC, pi.final_price ASC, pi.price ASC");
         $select->order($sortExpr);
-
         /**
          * Add additional external limitation
          */
@@ -117,14 +117,13 @@ class OrganicInternet_SimpleConfigurableProducts_Catalog_Model_Resource_Eav_Mysq
         $outerSelect = $write->select()
             ->from(array("inner" => $select), 'entity_id')
             ->group(array('inner.entity_id', 'inner.customer_group_id', 'inner.website_id'));
-
         $outerSelect->columns(array(
             'customer_group_id',
             'website_id',
             'tax_class_id',
             'orig_price',
             'price',
-            'min_price',
+            'min_price'     => new Zend_Db_Expr('MIN(inner.min_price)'),
             'max_price'     => new Zend_Db_Expr('MAX(inner.max_price)'),
             'tier_price',
             'base_tier',

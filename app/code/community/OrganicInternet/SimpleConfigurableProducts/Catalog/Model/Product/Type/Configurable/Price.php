@@ -37,14 +37,20 @@ class OrganicInternet_SimpleConfigurableProducts_Catalog_Model_Product_Type_Conf
     #of all child products, including any ones not currently salable.
     public function getFinalPrice($qty=null, $product)
     {
-/*
-        #calculatedFinalPrice seems not to be set in this version (1.4.0.1)
-        if (is_null($qty) && !is_null($product->getCalculatedFinalPrice())) {
-            #Doesn't usually get this far as Product.php checks first.
-            #Mage::log("returning calculatedFinalPrice for product: " . $product->getId());
-            return $product->getCalculatedFinalPrice();
+        /*
+                #calculatedFinalPrice seems not to be set in this version (1.4.0.1)
+                if (is_null($qty) && !is_null($product->getCalculatedFinalPrice())) {
+                    #Doesn't usually get this far as Product.php checks first.
+                    #Mage::log("returning calculatedFinalPrice for product: " . $product->getId());
+                    return $product->getCalculatedFinalPrice();
+                }
+        */
+        if(!(Mage::getStoreConfig('SCP_options/moduleInfo/moduleStatus') &&
+            Mage::getStoreConfig('SCP_options/product_page/set_price_is_lowest_price'))
+
+        ) {
+            return parent::getFinalPrice($qty=null, $product);
         }
-*/
         $childProduct = $this->getChildProductWithLowestPrice($product, "finalPrice");
         if (!$childProduct) {
             $childProduct = $this->getChildProductWithLowestPrice($product, "finalPrice", false);
@@ -62,6 +68,14 @@ class OrganicInternet_SimpleConfigurableProducts_Catalog_Model_Product_Type_Conf
 
     public function getPrice($product)
     {
+
+        if(!(Mage::getStoreConfig('SCP_options/moduleInfo/moduleStatus') &&
+            Mage::getStoreConfig('SCP_options/product_page/set_price_is_lowest_price'))
+
+        ) {
+            return parent::getPrice($product);
+        }
+
         #Just return indexed_price, if it's been fetched already
         #(which it will have been for collections, but not on product page)
         $price = $product->getIndexedPrice();

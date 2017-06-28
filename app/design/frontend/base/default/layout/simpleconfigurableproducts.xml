@@ -6,33 +6,33 @@
                  but we can't necessarily guarantee the load order of the script using the addJs mechanism.
                  Items of type 'skin_js' load after those of type 'js' however, so we use that.
                  (See getCssJsHtml in app/code/core/Mage/Page/Block/Html/Head.php) -->
-            <action method="addItem"><type>skin_js</type><name>js/scp_product_extension.js</name></action>
+            <action method="addItem" ifconfig="SCP_options/moduleInfo/moduleStatus"><type>skin_js</type><name>js/scp_product_extension.js</name></action>
         </reference>
 
         <reference name="product.info.options.wrapper">
-            <action method="setTemplate"><template>catalog/product/view/options/scpwrapper.phtml</template></action>
+            <action method="setTemplate" ifconfig="SCP_options/moduleInfo/moduleStatus"><template>catalog/product/view/options/scpwrapper.phtml</template></action>
         </reference>
 
         <reference name="product.info.options">
-            <action method="setTemplate"><template>catalog/product/view/scpoptions.phtml</template></action>
+            <action method="setTemplate" ifconfig="SCP_options/moduleInfo/moduleStatus"><template>catalog/product/view/scpoptions.phtml</template></action>
         </reference>
     </catalog_product_view>
 
     <customer_account>
         <reference name="sale.reorder.sidebar">
-            <action method="setTemplate"><template>sales/reorder/scpsidebar.phtml</template></action>
+            <action method="setTemplate" ifconfig="SCP_options/moduleInfo/moduleStatus"><template>sales/reorder/scpsidebar.phtml</template></action>
         </reference>
     </customer_account>
 
     <customer_logged_in>
         <reference name="sale.reorder.sidebar">
-            <action method="setTemplate"><template>sales/reorder/scpsidebar.phtml</template></action>
+            <action method="setTemplate" ifconfig="SCP_options/moduleInfo/moduleStatus"><template>sales/reorder/scpsidebar.phtml</template></action>
         </reference>
     </customer_logged_in>
 
     <oi_ajax_co>
         <reference name="root">
-            <action method="setTemplate"><template>page/scpcontentonly.phtml</template></action>
+            <action method="setTemplate" ifconfig="SCP_options/moduleInfo/moduleStatus"><template>page/scpcontentonly.phtml</template></action>
         </reference>
         <reference name="content">
             <block output="toHtml" type="catalog/product_view_options" name="product.info.options" as="product_options" template="catalog/product/view/scpajaxoptions.phtml">
@@ -46,7 +46,7 @@
     </oi_ajax_co>
     <oi_ajax_image>
         <reference name="root">
-            <action method="setTemplate"><template>page/scpcontentonly.phtml</template></action>
+            <action method="setTemplate" ifconfig="SCP_options/moduleInfo/moduleStatus"><template>page/scpcontentonly.phtml</template></action>
         </reference>
         <reference name="content">
             <block output="toHtml" type="catalog/product_view_media" name="product.info.media" as="media" template="catalog/product/view/media.phtml"/>
@@ -56,7 +56,7 @@
     <oi_ajax_gallery translate="label">
         <label>Catalog Product Image Gallery Popup</label>
         <reference name="root">
-            <action method="setTemplate"><template>page/popup.phtml</template></action>
+            <action method="setTemplate" ifconfig="SCP_options/moduleInfo/moduleStatus"><template>page/popup.phtml</template></action>
         </reference>
         <reference name="content">
             <block type="catalog/product_gallery" name="catalog_product_gallery" template="catalog/product/gallery.phtml"/>

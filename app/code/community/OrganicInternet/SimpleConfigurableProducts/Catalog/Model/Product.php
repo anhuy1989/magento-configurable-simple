@@ -24,6 +24,27 @@ class OrganicInternet_SimpleConfigurableProducts_Catalog_Model_Product
         }
     }
 
+    /**
+     * Get product final price not from index
+     *
+     * @param double $qty
+     * @return double
+     */
+    public function getFinalPrice($qty=null)
+    {
+        if(Mage::getStoreConfig('SCP_options/moduleInfo/moduleStatus') &&
+            Mage::getStoreConfig('SCP_options/product_page/set_price_is_lowest_price')
+
+        ) {
+            $price = $this->_getData('min_price');
+        }else{
+            $price = $this->_getData('final_price');
+        }
+        if ($price !== null) {
+            return $price;
+        }
+        return $this->getPriceModel()->getFinalPrice($qty, $this);
+    }
 
     public function getProductUrl($useSid = null)
     {

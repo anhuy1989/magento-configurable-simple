@@ -21,8 +21,10 @@
             $usedProducts = array();
             $collection = $this->getUsedProductCollection($product)
                 ->addAttributeToSelect('*');
-            // ->addFilterByRequiredOptions();
-
+            $storeId = Mage::app()->getStore()->getStoreId();
+            if(!Mage::helper('simpleconfigurableproducts')->IsModuleActiveOnStore($storeId)){
+                $collection->addFilterByRequiredOptions();
+            }
             if (is_array($requiredAttributeIds)) {
                 foreach ($requiredAttributeIds as $attributeId) {
                     $attribute = $this->getAttributeById($attributeId, $product);
